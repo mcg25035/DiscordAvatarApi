@@ -2,7 +2,20 @@ const express = require('express');
 const { getAvatarUrl } = require('./discordBot');
 
 const app = express();
-const port = 3000;
+const port = 1145;
+
+// CORS configuration
+app.use((req, res, next) => {
+  const allowedOrigins = ['mcloudtw.com', 'www.mcloudtw.com', 'localhost:3000'];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(new URL(origin).hostname) || origin === 'http://localhost:3000') {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
 
 app.get('/avatar/:userId', async (req, res) => {
   const userId = req.params.userId;
